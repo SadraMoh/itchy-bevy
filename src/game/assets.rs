@@ -6,7 +6,7 @@ use bevy::{
 
 #[derive(PartialEq, Eq, Hash, Reflect)]
 pub enum ImageAsset {
-    Ducky,
+    Ghost,
 }
 
 #[derive(Resource, Reflect, Deref, DerefMut)]
@@ -17,9 +17,10 @@ impl ImageAssets {
         let mut assets = HashMap::new();
 
         assets.insert(
-            ImageAsset::Ducky,
+            ImageAsset::Ghost,
             asset_server.load_with_settings(
-                "images/ducky.png",
+                // "images/ducky.png",
+                "images/ghost.png",
                 |settings: &mut ImageLoaderSettings| {
                     settings.sampler = ImageSampler::nearest();
                 },
