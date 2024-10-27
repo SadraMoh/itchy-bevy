@@ -5,6 +5,7 @@ use bevy::prelude::*;
 mod animation;
 pub mod assets;
 pub mod audio;
+pub mod map;
 mod movement;
 pub mod spawn;
 

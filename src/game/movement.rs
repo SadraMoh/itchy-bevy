@@ -1,11 +1,10 @@
 //! Handle player input and translate it into movement.
-//! Note that the approach used here is simple for demonstration purposes.
-//! If you want to move the player in a smoother way,
-//! consider using a [fixed timestep](https://github.com/bevyengine/bevy/blob/latest/examples/movement/physics_in_fixed_timestep.rs).
 
 use bevy::{prelude::*, window::PrimaryWindow};
 
 use crate::AppSet;
+
+use super::map::TILE_SIZE;
 
 pub(super) fn plugin(app: &mut App) {
     // Record directional input as movement controls.
@@ -27,7 +26,9 @@ pub(super) fn plugin(app: &mut App) {
 
 #[derive(Component, Reflect, Default)]
 #[reflect(Component)]
-pub struct MovementController(pub Vec2);
+pub struct MovementController {
+    pub direction: Vec2,
+}
 
 fn record_movement_controller(
     input: Res<ButtonInput<KeyCode>>,
@@ -48,13 +49,13 @@ fn record_movement_controller(
         intent.x += 1.0;
     }
 
-    // Normalize so that diagonal movement has the same speed as
-    // horizontal and vertical movement.
+    // normalize so that diagonal movement has the same speed as
+    // horizontal and vertical movement
     let intent = intent.normalize_or_zero();
 
-    // Apply movement intent to controllers.
+    // apply movement intent to controllers
     for mut controller in &mut controller_query {
-        controller.0 = intent;
+        controller.direction = intent;
     }
 }
 
@@ -73,8 +74,13 @@ fn apply_movement(
     mut movement_query: Query<(&MovementController, &Movement, &mut Transform)>,
 ) {
     for (controller, movement, mut transform) in &mut movement_query {
-        let velocity = movement.speed * controller.0;
-        transform.translation += velocity.extend(0.0) * time.delta_seconds();
+        let velocity = movement.speed * controller.direction;
+
+        transform.translation +=
+        velocity.extend(0.0) 
+        * time.delta_seconds() // make movement speed independent of framerate
+        * TILE_SIZE // make movement relative to tile size
+        ;
     }
 }
 

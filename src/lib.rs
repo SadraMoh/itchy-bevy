@@ -21,6 +21,7 @@ impl Plugin for AppPlugin {
         );
 
         // Spawn the main camera.
+        #[cfg(feature = "dev")]
         app.add_systems(Startup, spawn_camera);
 
         // Add Bevy plugins.

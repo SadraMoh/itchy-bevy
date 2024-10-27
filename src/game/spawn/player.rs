@@ -50,7 +50,7 @@ fn spawn_player(
             index: player_animation.get_atlas_index(),
         },
         MovementController::default(),
-        Movement { speed: 420.0 },
+        Movement { speed: 16. },
         WrapWithinWindow,
         player_animation,
         StateScoped(Screen::Playing),
